@@ -12,6 +12,7 @@
         <activity
             android:name=".online"
             android:exported="false" />
+        />
         <activity
             android:name=".AddNewItem"
             android:exported="false" />

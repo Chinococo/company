@@ -14,28 +14,28 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class online extends AppCompatActivity {
-    DatabaseReference db = FirebaseDatabase.getInstance().getReference("tasks");
+    DatabaseReference db = FirebaseDatabase.getInstance().getReference();
     String storeName;
     ListView listView;
-    ArrayList<String> data = new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    ArrayList<ArrayList<HashMap<String,String>>> data = new ArrayList<>();
+    taskitem adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
         storeName = getIntent().getStringExtra("storename");
-        listView = findViewById(R.id.taskListview);
-        adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, data);
+        listView = findViewById(R.id.Listview_online);
 
-        db.child(storeName).addValueEventListener(new ValueEventListener() {
+        db.child("Task").child(storeName).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                data = (ArrayList<String>) snapshot.getValue();
-                update();
+                data = (ArrayList<ArrayList<HashMap<String,String>>>) snapshot.getValue();
+                adapter = new taskitem(online.this,R.layout.taskitem,data);
+                listView.setAdapter(adapter);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -44,7 +44,5 @@ public class online extends AppCompatActivity {
 
     }
 
-    void update() {
-        adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, data);
-    }
+
 }
